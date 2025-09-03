@@ -1,4 +1,6 @@
-import { Stack } from "expo-router";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Stack, useRouter } from "expo-router";
+import { useEffect } from "react";
 
 import { Colors } from "@/constants/colors";
 import { PaperProvider } from "react-native-paper";
@@ -15,6 +17,23 @@ const theme = {
 };
 
 export default function RootLayout() {
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkUserInfo = async () => {
+      try {
+        const userInfo = await AsyncStorage.getItem('userInfo');
+        if (userInfo) {
+          // If user info exists, redirect to dashboard main screen
+          router.replace({ pathname: "/dashboard/dashboard" });
+        }
+      } catch (e) {
+        // handle error if needed
+      }
+    };
+    checkUserInfo();
+  }, []);
+
   return (
     <SafeAreaProvider>
       <PaperProvider theme={theme}>
