@@ -14,7 +14,7 @@ export default function AppScreen({ children, style = {} }) {
           { backgroundColor: Colors.background, flex: 1 },
           style,
         ]}
-        edges={['top']}
+        edges={['top','bottom']}
       >
         {children}
       </SafeAreaView>

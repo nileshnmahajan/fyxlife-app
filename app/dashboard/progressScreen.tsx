@@ -270,7 +270,7 @@ export default function ProgressScreen() {
           </Card.Content>
         </Card>
 
-        <View style={styles.actions} />
+          <View style={{ height: 100 }} />
       </ScrollView>
     </AppScreen>
   );

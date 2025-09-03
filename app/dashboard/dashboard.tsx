@@ -461,6 +461,9 @@ export default function DashboardScreen() {
             </Button>
           </View>
         </Animated.View>
+
+          <View style={{ height: 50 }} />
+
       </ScrollView>
     </AppScreen>
   );

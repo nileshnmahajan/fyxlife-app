@@ -112,7 +112,7 @@ export default function RiskMeterScreen() {
 
         {riskData.map((item) => renderRiskCard(item.system, item.risks))}
 
-        <View style={styles.actions} />
+          <View style={{ height: 100 }} />
       </ScrollView>
     </AppScreen>
   );

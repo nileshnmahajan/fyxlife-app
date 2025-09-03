@@ -10,6 +10,7 @@ import {
   Keyboard,
   ScrollView,
   StyleSheet,
+  TouchableOpacity,
   TouchableWithoutFeedback,
   View,
 } from "react-native";
@@ -17,7 +18,6 @@ import {
   ActivityIndicator,
   Button,
   RadioButton,
-  SegmentedButtons,
   Text,
   TextInput,
 } from "react-native-paper";
@@ -115,14 +115,19 @@ export default function UserInfoScreen() {
         <View style={styles.container}>
           {/* Progress bar */}
           <View style={styles.progressContainer}>
+            <View style={styles.progressHeader}>
+              <Text variant="labelMedium" style={styles.progressLabel}>
+                Profile Completion
+              </Text>
+              <Text variant="labelMedium" style={styles.progressPercentage}>
+                {Math.round(formCompletion() * 100)}%
+              </Text>
+            </View>
             <View style={styles.progressBackground}>
               <Animated.View
                 style={[styles.progressFill, { width: progressWidth }]}
               />
             </View>
-            <Text variant="labelSmall" style={styles.progressText}>
-              {Math.round(formCompletion() * 100)}% Complete
-            </Text>
           </View>
 
           <ScrollView
@@ -150,183 +155,226 @@ export default function UserInfoScreen() {
 
               {/* Name Input */}
               <View style={styles.inputContainer}>
-                <Text variant="labelMedium" style={styles.inputLabel}>
+                <Text variant="labelLarge" style={styles.inputLabel}>
                   Full Name
                 </Text>
                 <TextInput
-                  mode="outlined"
+                  mode="flat"
                   value={name}
                   onChangeText={setName}
                   placeholder="Enter your full name"
                   style={styles.input}
-                  outlineStyle={styles.inputOutline}
+                  underlineColor="transparent"
+                  activeUnderlineColor={Colors.primary}
                   left={
-                    <TextInput.Icon icon="account" color={Colors.primary} />
+                    <TextInput.Icon icon="account" color={Colors.primary} size={20} />
                   }
+                  theme={{
+                    colors: {
+                      primary: Colors.primary,
+                      background: '#fff',
+                    },
+                    roundness: 12,
+                  }}
                 />
               </View>
 
               {/* Age Input */}
               <View style={styles.inputContainer}>
-                <Text variant="labelMedium" style={styles.inputLabel}>
+                <Text variant="labelLarge" style={styles.inputLabel}>
                   Age
                 </Text>
                 <TextInput
-                  mode="outlined"
+                  mode="flat"
                   value={age}
                   onChangeText={setAge}
                   placeholder="Enter your age"
                   keyboardType="numeric"
                   style={styles.input}
-                  outlineStyle={styles.inputOutline}
-                  left={<TextInput.Icon icon="cake" color={Colors.primary} />}
+                  underlineColor="transparent"
+                  activeUnderlineColor={Colors.primary}
+                  left={<TextInput.Icon icon="cake" color={Colors.primary} size={20} />}
+                  theme={{
+                    colors: {
+                      primary: Colors.primary,
+                      background: '#fff',
+                    },
+                    roundness: 12,
+                  }}
                 />
-                <Text variant="bodySmall" style={{ color: '#607D8B', marginTop: 4, marginLeft: 2 }}>
+                <Text variant="bodySmall" style={styles.inputHint}>
                   Age in years
                 </Text>
               </View>
 
               {/* Phone Input */}
               <View style={styles.inputContainer}>
-                <Text variant="labelMedium" style={styles.inputLabel}>
+                <Text variant="labelLarge" style={styles.inputLabel}>
                   Phone Number
                 </Text>
                 <TextInput
-                  mode="outlined"
+                  mode="flat"
                   value={phone}
                   onChangeText={setPhone}
                   placeholder="Enter your phone number"
                   keyboardType="phone-pad"
                   style={styles.input}
-                  outlineStyle={styles.inputOutline}
-                  left={<TextInput.Icon icon="phone" color={Colors.primary} />}
+                  underlineColor="transparent"
+                  activeUnderlineColor={Colors.primary}
+                  left={<TextInput.Icon icon="phone" color={Colors.primary} size={20} />}
+                  theme={{
+                    colors: {
+                      primary: Colors.primary,
+                      background: '#fff',
+                    },
+                    roundness: 12,
+                  }}
                 />
               </View>
 
               {/* Gender Selection */}
               <View style={styles.inputContainer}>
-                <Text variant="labelMedium" style={styles.inputLabel}>
+                <Text variant="labelLarge" style={styles.inputLabel}>
                   Gender
                 </Text>
-                <SegmentedButtons
-                  value={gender}
-                  onValueChange={setGender}
-                  buttons={[
-                    {
-                      value: "male",
-                      label: "Male",
-                      icon: "gender-male",
-                      style:
-                        gender === "male"
-                          ? styles.selectedSegment
-                          : styles.segment,
-                      labelStyle:
-                        gender === "male"
-                          ? { color: "white" }
-                          : { color: Colors.text },
-                    },
-                    {
-                      value: "female",
-                      label: "Female",
-                      icon: "gender-female",
-                      style:
-                        gender === "female"
-                          ? [
-                              styles.selectedSegment,
-                              { borderLeftWidth: 0, borderRightWidth: 0 },
-                            ]
-                          : [
-                              styles.segment,
-                              { borderLeftWidth: 0, borderRightWidth: 0 },
-                            ],
-                      labelStyle:
-                        gender === "female"
-                          ? { color: "white" }
-                          : { color: Colors.text },
-                    },
-                    {
-                      value: "other",
-                      label: "Other",
-                      icon: "gender-male-female",
-                      style:
-                        gender === "other"
-                          ? [styles.selectedSegment, { borderLeftWidth: 0 }]
-                          : [styles.segment, { borderLeftWidth: 0 }],
-                      labelStyle:
-                        gender === "other"
-                          ? { color: "white" }
-                          : { color: Colors.text },
-                    },
-                  ]}
-                  style={styles.segmentedButtons}
-                />
+                <View style={styles.genderContainer}>
+                  <TouchableOpacity 
+                    style={[styles.genderOption, gender === 'male' && styles.genderOptionSelected]}
+                    onPress={() => setGender('male')}
+                    activeOpacity={0.8}
+                  >
+                    <View style={styles.genderIconContainer}>
+                      <Text style={[styles.genderIcon, gender === 'male' && styles.genderIconSelected]}>♂</Text>
+                    </View>
+                    <Text style={[styles.genderText, gender === 'male' && styles.genderTextSelected]}>Male</Text>
+                  </TouchableOpacity>
+                  
+                  <TouchableOpacity 
+                    style={[styles.genderOption, gender === 'female' && styles.genderOptionSelected]}
+                    onPress={() => setGender('female')}
+                    activeOpacity={0.8}
+                  >
+                    <View style={styles.genderIconContainer}>
+                      <Text style={[styles.genderIcon, gender === 'female' && styles.genderIconSelected]}>♀</Text>
+                    </View>
+                    <Text style={[styles.genderText, gender === 'female' && styles.genderTextSelected]}>Female</Text>
+                  </TouchableOpacity>
+                  
+                  <TouchableOpacity 
+                    style={[styles.genderOption, gender === 'other' && styles.genderOptionSelected]}
+                    onPress={() => setGender('other')}
+                    activeOpacity={0.8}
+                  >
+                    <View style={styles.genderIconContainer}>
+                      <Text style={[styles.genderIcon, gender === 'other' && styles.genderIconSelected]}>⚧</Text>
+                    </View>
+                    <Text style={[styles.genderText, gender === 'other' && styles.genderTextSelected]}>Other</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
 
               {/* Activity Level */}
               <View style={styles.inputContainer}>
-                <Text variant="labelMedium" style={styles.inputLabel}>
+                <Text variant="labelLarge" style={styles.inputLabel}>
                   Activity Level
                 </Text>
-                <RadioButton.Group
-                  onValueChange={setActivityLevel}
-                  value={activityLevel}
-                >
-                  <View style={styles.radioContainer}>
-                    <View style={styles.radioOption}>
-                      <RadioButton value="sedentary" color={Colors.primary} />
-                      <Text
-                        variant="bodyMedium"
-                        onPress={() => setActivityLevel("sedentary")}
-                      >
-                        Sedentary (little to no exercise)
+                <View style={styles.activityContainer}>
+                  <RadioButton.Group
+                    onValueChange={setActivityLevel}
+                    value={activityLevel}
+                  >
+                    <TouchableOpacity 
+                      style={[styles.activityOption, activityLevel === 'sedentary' && styles.activityOptionSelected]}
+                      onPress={() => setActivityLevel('sedentary')}
+                      activeOpacity={0.8}
+                    >
+                      <View style={styles.activityRadio}>
+                        <RadioButton value="sedentary" color={Colors.primary} />
+                        <Text variant="bodyMedium" style={styles.activityText}>
+                          Sedentary
+                        </Text>
+                      </View>
+                      <Text variant="bodySmall" style={styles.activityDescription}>
+                        Little to no exercise
                       </Text>
-                    </View>
-                    <View style={styles.radioOption}>
-                      <RadioButton value="light" color={Colors.primary} />
-                      <Text
-                        variant="bodyMedium"
-                        onPress={() => setActivityLevel("light")}
-                      >
-                        Light (1-3 days/week)
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                      style={[styles.activityOption, activityLevel === 'light' && styles.activityOptionSelected]}
+                      onPress={() => setActivityLevel('light')}
+                      activeOpacity={0.8}
+                    >
+                      <View style={styles.activityRadio}>
+                        <RadioButton value="light" color={Colors.primary} />
+                        <Text variant="bodyMedium" style={styles.activityText}>
+                          Light
+                        </Text>
+                      </View>
+                      <Text variant="bodySmall" style={styles.activityDescription}>
+                        1-3 days/week
                       </Text>
-                    </View>
-                    <View style={styles.radioOption}>
-                      <RadioButton value="moderate" color={Colors.primary} />
-                      <Text
-                        variant="bodyMedium"
-                        onPress={() => setActivityLevel("moderate")}
-                      >
-                        Moderate (3-5 days/week)
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                      style={[styles.activityOption, activityLevel === 'moderate' && styles.activityOptionSelected]}
+                      onPress={() => setActivityLevel('moderate')}
+                      activeOpacity={0.8}
+                    >
+                      <View style={styles.activityRadio}>
+                        <RadioButton value="moderate" color={Colors.primary} />
+                        <Text variant="bodyMedium" style={styles.activityText}>
+                          Moderate
+                        </Text>
+                      </View>
+                      <Text variant="bodySmall" style={styles.activityDescription}>
+                        3-5 days/week
                       </Text>
-                    </View>
-                    <View style={styles.radioOption}>
-                      <RadioButton value="active" color={Colors.primary} />
-                      <Text
-                        variant="bodyMedium"
-                        onPress={() => setActivityLevel("active")}
-                      >
-                        Active (6-7 days/week)
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                      style={[styles.activityOption, activityLevel === 'active' && styles.activityOptionSelected]}
+                      onPress={() => setActivityLevel('active')}
+                      activeOpacity={0.8}
+                    >
+                      <View style={styles.activityRadio}>
+                        <RadioButton value="active" color={Colors.primary} />
+                        <Text variant="bodyMedium" style={styles.activityText}>
+                          Active
+                        </Text>
+                      </View>
+                      <Text variant="bodySmall" style={styles.activityDescription}>
+                        6-7 days/week
                       </Text>
-                    </View>
-                    <View style={styles.radioOption}>
-                      <RadioButton value="very-active" color={Colors.primary} />
-                      <Text
-                        variant="bodyMedium"
-                        onPress={() => setActivityLevel("very-active")}
-                      >
-                        Very Active (professional athlete)
+                    </TouchableOpacity>
+                    
+                    <TouchableOpacity 
+                      style={[styles.activityOption, activityLevel === 'very-active' && styles.activityOptionSelected]}
+                      onPress={() => setActivityLevel('very-active')}
+                      activeOpacity={0.8}
+                    >
+                      <View style={styles.activityRadio}>
+                        <RadioButton value="very-active" color={Colors.primary} />
+                        <Text variant="bodyMedium" style={styles.activityText}>
+                          Very Active
+                        </Text>
+                      </View>
+                      <Text variant="bodySmall" style={styles.activityDescription}>
+                        Professional athlete
                       </Text>
-                    </View>
-                  </View>
-                </RadioButton.Group>
+                    </TouchableOpacity>
+                  </RadioButton.Group>
+                </View>
               </View>
 
               {/* Optional Fields */}
               <View style={styles.optionalSection}>
-                <Text variant="titleSmall" style={styles.optionalTitle}>
-                  Optional Information
-                </Text>
-                <Text variant="bodySmall" style={styles.optionalSubtitle}>
+                <View style={styles.optionalHeader}>
+                  <Text variant="titleMedium" style={styles.optionalTitle}>
+                    Optional Information
+                  </Text>
+                  <View style={styles.optionalDivider} />
+                </View>
+                <Text variant="bodyMedium" style={styles.optionalSubtitle}>
                   Help us personalize your experience even more
                 </Text>
 
@@ -336,13 +384,21 @@ export default function UserInfoScreen() {
                       Height (cm)
                     </Text>
                     <TextInput
-                      mode="outlined"
+                      mode="flat"
                       value={height}
                       onChangeText={setHeight}
                       placeholder="e.g. 175"
                       keyboardType="numeric"
                       style={styles.input}
-                      outlineStyle={styles.inputOutline}
+                      underlineColor="transparent"
+                      activeUnderlineColor={Colors.primary}
+                      theme={{
+                        colors: {
+                          primary: Colors.primary,
+                          background: '#fff',
+                        },
+                        roundness: 12,
+                      }}
                     />
                   </View>
 
@@ -351,13 +407,21 @@ export default function UserInfoScreen() {
                       Weight (kg)
                     </Text>
                     <TextInput
-                      mode="outlined"
+                      mode="flat"
                       value={weight}
                       onChangeText={setWeight}
                       placeholder="e.g. 68"
                       keyboardType="numeric"
                       style={styles.input}
-                      outlineStyle={styles.inputOutline}
+                      underlineColor="transparent"
+                      activeUnderlineColor={Colors.primary}
+                      theme={{
+                        colors: {
+                          primary: Colors.primary,
+                          background: '#fff',
+                        },
+                        roundness: 12,
+                      }}
                     />
                   </View>
                 </View>
@@ -372,7 +436,11 @@ export default function UserInfoScreen() {
                 disabled={!isFormValid() || isSubmitting}
                 contentStyle={styles.buttonContent}
               >
-                {isSubmitting ? <ActivityIndicator color="#fff" /> : "Continue"}
+                {isSubmitting ? (
+                  <ActivityIndicator color="#fff" />
+                ) : (
+                  "Continue to Your Plan"
+                )}
               </Button>
             </Animated.View>
           </ScrollView>
@@ -403,35 +471,47 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    // backgroundColor: Colors.background,
   },
   progressContainer: {
     paddingHorizontal: 24,
     paddingTop: 16,
-    paddingBottom: 8,
-    // backgroundColor: "#fff",
+    paddingBottom: 16,
+    backgroundColor: "#fff",
     borderBottomWidth: 1,
     borderBottomColor: "#f0f0f0",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.05,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  progressHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  progressLabel: {
+    color: Colors.text,
+    fontWeight: "600",
+  },
+  progressPercentage: {
+    color: Colors.primary,
+    fontWeight: "700",
   },
   progressBackground: {
     height: 6,
-    backgroundColor: "#e0e0e0",
+    backgroundColor: "#f0f0f0",
     borderRadius: 3,
     overflow: "hidden",
-    marginBottom: 8,
   },
   progressFill: {
     height: "100%",
     backgroundColor: Colors.primary,
     borderRadius: 3,
   },
-  progressText: {
-    color: Colors.text,
-    textAlign: "center",
-  },
   scrollView: {
-    // flex: 1,
-    // backgroundColor:"red"
+    flex: 1,
   },
   scrollContent: {
     padding: 24,
@@ -450,9 +530,10 @@ const styles = StyleSheet.create({
     textAlign: "center",
     color: "#607D8B",
     marginBottom: 32,
+    lineHeight: 20,
   },
   inputContainer: {
-    marginBottom: 20,
+    marginBottom: 24,
   },
   inputLabel: {
     marginBottom: 8,
@@ -462,45 +543,105 @@ const styles = StyleSheet.create({
   input: {
     backgroundColor: "#fff",
   },
-  inputOutline: {
-    borderRadius: 12,
-    borderWidth: 1.5,
+  inputHint: {
+    color: '#607D8B', 
+    marginTop: 4, 
+    marginLeft: 12
   },
-  segmentedButtons: {
-    borderRadius: 12,
-    overflow: "hidden",
+  genderContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginTop: 8,
   },
-  segment: {
-    // borderRadius: 10,
+  genderOption: {
+    alignItems: "center",
+    justifyContent: "center",
+    padding: 16,
+    borderRadius: 16,
+    backgroundColor: "#f8f9fa",
+    width: "30%",
+    borderWidth: 2,
+    borderColor: "transparent",
   },
-  selectedSegment: {
-    backgroundColor: Colors.primary,
-    // borderRadius: 10,
-    color: "white",
+  genderOptionSelected: {
+    backgroundColor: "rgba(108, 99, 255, 0.1)",
+    borderColor: Colors.primary,
   },
-  radioContainer: {
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderColor: "#ccc",
-    padding: 8,
+  genderIconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: "rgba(108, 99, 255, 0.1)",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom: 8,
+  },
+  genderIcon: {
+    fontSize: 20,
+    color: Colors.text,
+  },
+  genderIconSelected: {
+    color: Colors.primary,
+  },
+  genderText: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: Colors.text,
+  },
+  genderTextSelected: {
+    color: Colors.primary,
+    fontWeight: "600",
+  },
+  activityContainer: {
+    borderRadius: 16,
     backgroundColor: "#fff",
+    overflow: "hidden",
+    marginTop: 8,
+    borderWidth: 1,
+    borderColor: "#f0f0f0",
   },
-  radioOption: {
+  activityOption: {
+    padding: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#f0f0f0",
+  },
+  activityOptionSelected: {
+    backgroundColor: "rgba(108, 99, 255, 0.05)",
+  },
+  activityRadio: {
     flexDirection: "row",
     alignItems: "center",
-    paddingVertical: 8,
+    marginBottom: 4,
+  },
+  activityText: {
+    marginLeft: 8,
+    fontWeight: "500",
+  },
+  activityDescription: {
+    color: "#607D8B",
+    marginLeft: 48,
   },
   optionalSection: {
-    marginTop: 16,
+    marginTop: 24,
     marginBottom: 32,
-    padding: 16,
+    padding: 20,
     backgroundColor: "#f8f9fa",
     borderRadius: 16,
   },
+  optionalHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 12,
+  },
   optionalTitle: {
-    fontWeight: "600",
-    marginBottom: 4,
+    fontWeight: "700",
     color: Colors.text,
+    marginRight: 12,
+  },
+  optionalDivider: {
+    flex: 1,
+    height: 1,
+    backgroundColor: "#e0e0e0",
   },
   optionalSubtitle: {
     color: "#607D8B",
@@ -514,7 +655,7 @@ const styles = StyleSheet.create({
     width: "48%",
   },
   button: {
-    borderRadius: 12,
+    borderRadius: 16,
     paddingVertical: 6,
     marginTop: 16,
     shadowColor: Colors.primary,

@@ -56,7 +56,7 @@ export default function WelcomeScreen() {
           {/* Illustration with animation */}
           <Animated.View style={styles.imageContainer}>
             <Image
-              source={{ uri: "https://cdn-icons-png.flaticon.com/512/2966/2966485.png" }}
+              source={require("../assets/logo-2.png")}
               style={styles.image}
               resizeMode="contain"
             />
@@ -64,7 +64,7 @@ export default function WelcomeScreen() {
 
           {/* Title with gradient effect */}
           <Text variant="headlineLarge" style={styles.title}>
-            Welcome to <Text style={styles.brand}>Fyxlife</Text> 🌱
+            Welcome to <Text style={styles.brand}>Fyxlife</Text>
           </Text>
 
           {/* Subtitle */}
@@ -161,8 +161,8 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   image: {
-    width: 180,
-    height: 180,
+    width: 100,
+    height: 100,
   },
   title: {
     fontWeight: "800",
