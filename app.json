@@ -14,9 +14,10 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/logo-2.png",
-        "backgroundColor": "#FF6F61"
+        "backgroundColor": "#FFFFFF"
       },
-      "edgeToEdgeEnabled": true
+      "edgeToEdgeEnabled": true,
+      "package": "com.fyxlife.app.nilesh"
     },
     "web": {
       "bundler": "metro",
@@ -31,7 +32,7 @@
           "image": "./assets/logo-2.png",
           "imageWidth": 200,
           "resizeMode": "contain",
-          "backgroundColor": "#FF6F61"
+          "backgroundColor": "#FFFFFF"
         }
       ]
     ],

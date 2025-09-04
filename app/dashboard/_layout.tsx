@@ -68,7 +68,7 @@ export default function RootLayout() {
 const styles = StyleSheet.create({
   tabBar: {
     position: 'absolute',
-    bottom: 35,
+    bottom: 36,
     left: 20,
     right: 20,
     height: 45,
