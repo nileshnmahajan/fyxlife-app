@@ -125,3 +125,10 @@ This can evolve to a lightweight model using recent adherence, streaks, and time
 - Offline first: Queue progress events, background sync.
 - Security: Real keystore handling, env‑based config, secret management.
 - UX: Add charts, richer goal templates, notifications, and streak widgets.
+
+## Assets & links
+
+- Screenshots: App and otehr supporting  docs screenshots under `docs/screenshots/`
+- Videos: Demo clips under `docs/videos/`;
+- Designs: exported design , flows , task planning snapshots under `docs/design/`.
+- APK: [v0.1 download link](https://github.com/nileshnmahajan/fyxlife-app/releases/download/v0.1/fyzlife-app.apk).
