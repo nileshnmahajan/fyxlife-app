@@ -25,7 +25,7 @@ export default function RootLayout() {
         const userInfo = await AsyncStorage.getItem('userInfo');
         if (userInfo) {
           // If user info exists, redirect to dashboard main screen
-          router.replace({ pathname: "/dashboard/dashboard" });
+          router.replace({ pathname: "/dashboard" });
         }
       } catch (e) {
         // handle error if needed

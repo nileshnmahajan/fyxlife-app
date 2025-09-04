@@ -6,9 +6,11 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useEffect, useRef, useState } from "react";
 import {
+  Alert,
   Animated,
   Dimensions,
   Easing,
+  Modal,
   ScrollView,
   StyleSheet,
   TouchableOpacity,
@@ -24,11 +26,30 @@ import {
 } from "react-native-paper";
 const { width } = Dimensions.get("window");
 
-// Mock data for demonstration
-const wellnessData = {
-  move: { current: 45, goal: 60, unit: "min", streak: 3 },
-  eat: { current: 3, goal: 5, unit: "meals", streak: 5 },
-  calm: { current: 10, goal: 15, unit: "min", streak: 2 },
+// Alternative goals for swapping
+const alternativeGoals = {
+  move: [
+    { label: "20 min walk", current: 20, goal: 20, unit: "min", streak: 0 },
+    { label: "10 min stretch", current: 10, goal: 10, unit: "min", streak: 0 },
+    { label: "15 min yoga", current: 15, goal: 15, unit: "min", streak: 0 },
+  ],
+  eat: [
+    { label: "3 healthy meals", current: 3, goal: 3, unit: "meals", streak: 0 },
+    { label: "2 fruits", current: 2, goal: 2, unit: "fruits", streak: 0 },
+    { label: "Drink 2L water", current: 2, goal: 2, unit: "L", streak: 0 },
+  ],
+  calm: [
+    { label: "10 min meditation", current: 10, goal: 10, unit: "min", streak: 0 },
+    { label: "Read 15 min", current: 15, goal: 15, unit: "min", streak: 0 },
+    { label: "Breathing exercise", current: 5, goal: 5, unit: "min", streak: 0 },
+  ],
+};
+
+// Initial goals
+const initialWellnessData = {
+  move: { label: "Move", current: 45, goal: 60, unit: "min", streak: 3 },
+  eat: { label: "Eat", current: 3, goal: 5, unit: "meals", streak: 5 },
+  calm: { label: "Calm", current: 10, goal: 15, unit: "min", streak: 2 },
 };
 
 const progressData = {
@@ -70,29 +91,34 @@ const riskData = [
   },
 ];
 
+
 export default function DashboardScreen() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("today");
   const [refreshing, setRefreshing] = useState(false);
-
   const [userInfo, setUserInfo] = useState(null);
-
+  const showComingSoon = (feature: string) =>
+    Alert.alert("Coming soon", `${feature} will be available soon.`);
+  // Wellness goals state
+  const [wellnessData, setWellnessData] = useState(initialWellnessData);
+  // Modal state for swapping
+  const [swapModal, setSwapModal] = useState({ open: false, type: null });
   // Animation values
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideAnim = useRef(new Animated.Value(20)).current;
   const scaleAnim = useRef(new Animated.Value(0.95)).current;
 
-    useEffect(() => {
-      const fetchUserInfo = async () => {
-        try {
-          const data = await AsyncStorage.getItem("userInfo");
-          if (data) setUserInfo(JSON.parse(data));
-        } catch (e) {
-          // handle error
-        }
-      };
-      fetchUserInfo();
-    }, []);
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const data = await AsyncStorage.getItem("userInfo");
+        if (data) setUserInfo(JSON.parse(data));
+      } catch (e) {
+        // handle error
+      }
+    };
+    fetchUserInfo();
+  }, []);
 
   useEffect(() => {
     // Animate dashboard elements on load
@@ -138,17 +164,10 @@ export default function DashboardScreen() {
 
   const renderWellnessCard = (type, data) => {
     const icons = {
-      move: "run",
-      eat: "food-apple",
-      calm: "meditation",
+      move: "🏃",
+      eat: "🍽",
+      calm: "😌",
     };
-
-    const titles = {
-      move: "Move",
-      eat: "Eat",
-      calm: "Calm",
-    };
-
     const progress = data.current / data.goal;
     const progressColor =
       progress >= 0.8
@@ -162,13 +181,11 @@ export default function DashboardScreen() {
         <Card.Content style={styles.wellnessCardContent}>
           <View style={styles.wellnessHeader}>
             <View style={styles.wellnessIconContainer}>
-              <Text style={styles.wellnessIcon}>
-                {type === "move" ? "🏃" : type === "eat" ? "🍽" : "😌"}
-              </Text>
+              <Text style={styles.wellnessIcon}>{icons[type]}</Text>
             </View>
             <View>
               <Text variant="titleMedium" style={styles.wellnessTitle}>
-                {titles[type]}
+                {data.label || type.charAt(0).toUpperCase() + type.slice(1)}
               </Text>
               <Text variant="bodySmall" style={styles.wellnessSubtitle}>
                 {data.current}/{data.goal} {data.unit}
@@ -194,7 +211,8 @@ export default function DashboardScreen() {
               mode="contained"
               containerColor={Colors.primary + "20"}
               iconColor={Colors.primary}
-              onPress={() => console.log(`Swap ${type} goal`)}
+              onPress={() => setSwapModal({ open: true, type })}
+              accessibilityLabel={`Swap ${type} goal`}
             />
           </View>
         </Card.Content>
@@ -338,6 +356,70 @@ export default function DashboardScreen() {
           </ScrollView>
         </Animated.View>
 
+        {/* Swap Modal using React Native Modal */}
+        <Modal
+          visible={swapModal.open}
+          transparent
+          animationType="fade"
+          onRequestClose={() => setSwapModal({ open: false, type: null })}
+        >
+          <View
+            style={{
+              flex: 1,
+              backgroundColor: "rgba(0,0,0,0.25)",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: "white",
+                borderRadius: 16,
+                padding: 24,
+                minWidth: 280,
+                elevation: 8,
+                alignItems: "center",
+              }}
+            >
+              <Text variant="titleMedium" style={{ marginBottom: 16 }}>
+                Swap Goal
+              </Text>
+              {swapModal.type && alternativeGoals[swapModal.type]
+                .filter(
+                  (alt) =>
+                    alt.label !==
+                    (wellnessData[swapModal.type]?.label || "")
+                )
+                .map((alt) => (
+                  <Button
+                    key={alt.label}
+                    mode="outlined"
+                    style={{ marginBottom: 8, width: 200 }}
+                    onPress={() => {
+                      setWellnessData((prev) => ({
+                        ...prev,
+                        [swapModal.type]: {
+                          ...alt,
+                          streak: prev[swapModal.type].streak, // preserve streak
+                        },
+                      }));
+                      setSwapModal({ open: false, type: null });
+                    }}
+                  >
+                    {alt.label}
+                  </Button>
+                ))}
+              <Button
+                mode="text"
+                onPress={() => setSwapModal({ open: false, type: null })}
+                style={{ marginTop: 8 }}
+              >
+                Cancel
+              </Button>
+            </View>
+          </View>
+        </Modal>
+
         {/* Progress Summary */}
         <Text variant="titleLarge" style={styles.sectionTitle}>
           Your Progress
@@ -426,7 +508,7 @@ export default function DashboardScreen() {
               icon="plus"
               style={styles.actionButton}
               contentStyle={styles.actionButtonContent}
-              onPress={() => console.log("Add goal")}
+              onPress={() => showComingSoon("Add Goal")}
             >
               Add Goal
             </Button>
@@ -435,7 +517,7 @@ export default function DashboardScreen() {
               icon="chart-line"
               style={styles.actionButton}
               contentStyle={styles.actionButtonContent}
-              onPress={() => console.log("View insights")}
+              onPress={() => showComingSoon("Insights")}
             >
               Insights
             </Button>
@@ -446,7 +528,7 @@ export default function DashboardScreen() {
               icon="doctor"
               style={styles.actionButton}
               contentStyle={styles.actionButtonContent}
-              onPress={() => console.log("Health tips")}
+              onPress={() => showComingSoon("Health Tips")}
             >
               Health Tips
             </Button>

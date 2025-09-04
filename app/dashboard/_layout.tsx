@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native";
 export default function RootLayout() {
   return (
     <Tabs 
-      initialRouteName="dashboard" 
+      initialRouteName="index" 
       screenOptions={{ 
         headerShown: false,
         tabBarStyle: styles.tabBar,
@@ -17,7 +17,7 @@ export default function RootLayout() {
       }}
     >
       <Tabs.Screen
-        name="dashboard"
+        name="index"
         options={{
           title: "Dashboard",
           tabBarIcon: ({ color, size, focused }) => (
